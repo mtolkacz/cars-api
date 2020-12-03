@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<h2>Cars API</h2>
+<a href="{% url 'cars:list_create_update' %}">List of all cars</a><br>
+<a href="{% url 'cars:popular_list' %}">List of top 10 popular cars</a>
+
+{% endblock %}
+
+http://localhost:8000/cars/

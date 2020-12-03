@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<h2>Cars API</h2>
+
+<a href="{% url 'cars:index' %}">Back to main page</a><br>
+<a href="{% url 'cars:list_create_update' %}">All cars</a><br><br>
+
+
+{% if cars %}
+<b>Cars</b>
+{% for car in cars %}
+<table>
+    <tr>
+        <td>{{ car.make_name }}</td>
+        <td>{{ car.model_name }}</td>
+        <td>Rate: {% if car.get_average_rate > 0 %}{{ car.get_average_rate }}/5 ({% if car.count %}{{ car.count }}
+            vote{% if car.count > 1 %}s{% endif %}){% endif %}{% else %}n/a{% endif %}
+        </td>
+    </tr>
+</table>
+{% endfor %}
+{% else %}
+No cars found
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  web:
+    container_name: cars_web
+    build: ./app
+    command: python manage.py runserver 0.0.0.0:8000 --settings=config.settings.local
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./app/:/usr/src/app/
+    ports:
+      - 8000:8000
+    env_file: ./env/dev/.env
+    depends_on:
+      - db
+    networks:
+      cars:
+        ipv4_address: 10.5.0.5
+  db:
+    container_name: cars_db
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file: ./env/dev/.env
+    networks:
+      cars:
+        ipv4_address: 10.5.0.6
+volumes:
+  postgres_data:
+  pgadmin:
+
+networks:
+  cars:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<h2>Cars API</h2>
+
+<a href="{% url 'cars:index' %}">Back to main page</a><br>
+<a href="{% url 'cars:popular_list' %}">List of popular cars</a><br><br>
+
+
+{% if cars %}
+<b>Cars</b>
+{% for car in cars %}
+<table>
+    <tr>
+        <td>{{ car.make_name }}</td>
+        <td>{{ car.model_name }}</td>
+        <td>Rate: {% if car.get_average_rate > 0 %}{{ car.get_average_rate }}/5{% else %}n/a{% endif %}
+        </td>
+    </tr>
+</table>
+{% endfor %}
+{% elif car %}
+<b>Car - {% if response_code == 200 %}Updated{% elif response_code == 201 %}Created{% else %}response code:{{
+    response_code }}{% endif %}</b>
+<table>
+    <tr>
+        <td>{{ car.make_name }}</td>
+        <td>{{ car.model_name }}</td>
+    </tr>
+</table>
+{% elif error_detail %}
+{{ error_detail }}
+{% else %}
+No cars found
+{% endif %}
+
+{% endblock %}
