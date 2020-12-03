@@ -1,0 +1,1 @@
+web: gunicorn app.cars_proj.config.wsgi
