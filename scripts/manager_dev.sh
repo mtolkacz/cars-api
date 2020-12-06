@@ -44,12 +44,13 @@ while [ ! $number -eq 0 ]; do
 	echo "33.rebuild indexes"
 	echo "34.kazen"
 	echo "35.workers log"
+	echo "36.tests"
 	printf "\nChoose: "
     read number
     case "$number" in
 	0)  docker-compose -f $(dirname $PWD)/local.yml up -d --build
 	    ;;
-	1)  sh $(dirname $PWD)/start.sh -e dev
+	1)  docker-compose -f $(dirname $PWD)/local.yml up -d
 	    ;;
 	2)  docker-compose -f $(dirname $PWD)/local.yml stop
 	    ;;
@@ -119,6 +120,8 @@ while [ ! $number -eq 0 ]; do
 	   ;;
 	35) docker-compose -f $(dirname $PWD)/local.yml logs --tail="300" | grep -E "worker"
            ;;
+        36)  docker-compose -f $(dirname $PWD)/local.yml exec web python manage.py test
+	   ;;
 	0) exit 0
 	   ;;
 	*) echo

@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import django_heroku
 
 from django.core.exceptions import ImproperlyConfigured
 
@@ -8,13 +9,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 ROOT_DIR = BASE_DIR / PROJECT_NAME
 MEDIA_ROOT = ROOT_DIR / 'media'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-STATIC_URL = 'static/'
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-)
+STATIC_ROOT = BASE_DIR / 'static_root'
+STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 def get_env_variable(var_name):
@@ -28,9 +25,9 @@ def get_env_variable(var_name):
         raise ImproperlyConfigured(error_msg)
 
 
-SECRET_KEY = get_env_variable("SECRET_KEY")
+SECRET_KEY = get_env_variable('SECRET_KEY')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['simple-cars-api.herokuapp.com']
 
 
 # Application definition
@@ -49,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -116,3 +114,7 @@ USE_TZ = True
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
+

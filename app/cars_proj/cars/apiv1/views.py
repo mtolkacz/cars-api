@@ -27,8 +27,6 @@ class CarListCreateUpdateAPIView(CarCreateUpdateMixin, CarAPIView, ListCreateAPI
         'model_name',
         'make__make_name',
     )
-    # queryset = Car.objects.all()
-    # queryset = Car.objects.all()
 
     def get(self, request, *args, **kwargs):
         cars = self.get_queryset()
@@ -36,7 +34,6 @@ class CarListCreateUpdateAPIView(CarCreateUpdateMixin, CarAPIView, ListCreateAPI
         context = {
             'cars': serialized_books.data
         }
-        print(context)
         return Response(context, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
@@ -52,9 +49,7 @@ class CarListCreateUpdateAPIView(CarCreateUpdateMixin, CarAPIView, ListCreateAPI
 
         # when create/update operation has been successful then prepare serialized data
         else:
-            print(self.queryset)
             serialized_car = self.get_serializer(car_obj)
-            print(serialized_car.data)
             context = {
                 'car': serialized_car.data,
                 'response_code': response_code,

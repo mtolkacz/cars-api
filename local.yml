@@ -3,7 +3,9 @@ version: '3.7'
 services:
   web:
     container_name: cars_web
-    build: ./app
+    build: 
+      context: ./app
+      dockerfile: Dockerfile.local
     command: python manage.py runserver 0.0.0.0:8000 --settings=config.settings.local
     stdin_open: true
     tty: true
@@ -29,7 +31,6 @@ services:
 volumes:
   postgres_data:
   pgadmin:
-
 networks:
   cars:
     driver: bridge

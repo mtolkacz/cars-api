@@ -1,27 +1,34 @@
 # pull official base image
-FROM python:3.9.0-alpine
+FROM python:3.8-alpine
 
 # set work directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# set environment variables+
+# set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV DEBUG 0
 
-# install psycopg2 dependencies
-RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev
-
-# copy entrypoint.sh
-COPY ./entrypoint.sh /user/src/app/entrypoint.sh
+# install psycopg2
+RUN pip install --upgrade pip \
+    && apk update \
+    && apk add --virtual build-deps gcc python3-dev musl-dev \
+    && apk add postgresql-dev \
+    && pip install psycopg2 \
+    && apk del build-deps
 
 # copy project
-COPY . /usr/src/app
+COPY . .
 
-# install dependencies
-RUN pip install --upgrade pip
-COPY /requirements/local.txt /requirements/local.txt
-RUN pip install -r requirements/local.txt
+## install dependencies
+RUN pip install -r requirements/production.txt
 
 # run entrypoint.sh
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
+
+# add and run as non-root user
+RUN adduser -D michal
+RUN chown michal:michal -R /app
+USER michal
+
+

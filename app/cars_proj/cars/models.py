@@ -20,6 +20,9 @@ class Make(models.Model):
         auto_now=True,
     )
 
+    class Meta:
+        app_label = 'cars_proj.cars'
+
 
 class Car(models.Model):
     model_id = models.IntegerField(
@@ -39,6 +42,9 @@ class Car(models.Model):
     modified_date = models.DateTimeField(
         auto_now=True,
     )
+
+    class Meta:
+        app_label = 'cars_proj.cars'
 
     def get_average_rate(self):
         return Rate.objects.filter(car=self).aggregate(rate__avg=Round(Avg('rate')))['rate__avg']
@@ -67,6 +73,7 @@ class Rate(models.Model):
     )
 
     class Meta:
+        app_label = 'cars_proj.cars'
         constraints = [
             models.CheckConstraint(
                 check=models.Q(rate__gte=1) & models.Q(rate__lte=5),
