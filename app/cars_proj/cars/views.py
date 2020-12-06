@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from . import apiv1
+from .apiv1 import views as apiv1
 
 
 def index(request):
